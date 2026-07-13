@@ -1,0 +1,17 @@
+[credential]
+	helper = store
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[user]
+    name = hauterville
+    email = hauterville@xlim.fr
+
+# Dès qu'on est dans ce dossier, Git charge le fichier de config perso
+[includeIf "gitdir:~/ws/github_perso/"]
+    path = ~/ws/github_perso/.gitconfig-perso
+[init]
+	defaultBranch = main
