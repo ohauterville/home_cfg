@@ -1,0 +1,6 @@
+import "justfiles/common.just"
+import "justfiles/help.just"
+import "justfiles/ros.just"
+import "justfiles/tmux.just"
+
+set working-directory := "."
