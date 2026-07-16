@@ -119,6 +119,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+# TODO: remove for other laptops
 source /opt/unilim/profile/.bashrc
 
 # APPTAINER

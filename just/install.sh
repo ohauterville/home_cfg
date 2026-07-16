@@ -4,9 +4,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting 'just'..."
 
-# ---------------------------------------------------------
-# 1. INSTALLATION DE JUST (Si non présent)
-# ---------------------------------------------------------
+# 1. INSTALL JUST
 if ! command -v just &> /dev/null; then
     echo "⬇️ 'just' will be installed in ~/.local/bin..."
     mkdir -p ~/.local/bin

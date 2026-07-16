@@ -1,3 +1,5 @@
+#Display all this file
+alias aliases="grep -v '^#' ~/.bash_aliases | grep -v '^$'"
 #CD
 alias ws="cd ~/ws/gitlab_xlim/remix_ws"
 alias wspro="cd ~/ws/gitlab_xlim"
