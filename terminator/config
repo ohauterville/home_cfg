@@ -1,0 +1,18 @@
+[global_config]
+[keybindings]
+[profiles]
+  [[default]]
+    scrollback_infinite = True
+  [[tmux]]
+    scrollback_infinite = True
+    use_custom_command = True
+    custom_command = tmux new-session -A -s main
+    exit_action = close
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+[plugins]
