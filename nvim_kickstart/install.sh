@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
 #
-# install.sh - Install kickstart.nvim on this machine
+# install.sh - Install kickstart.nvim and IDE layout linked to dotfiles
 #
-# This script:
-#   1. Checks that neovim is installed (recent enough version required)
-#   2. Backs up any existing nvim config
-#   3. Clones kickstart.nvim into ~/.config/nvim
-#   4. Runs a headless sync to install plugins ahead of first launch
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_CONFIG_DIR="${SCRIPT_DIR}/config"
 NVIM_CONFIG_DIR="${HOME}/.config/nvim"
 KICKSTART_REPO="https://github.com/nvim-lua/kickstart.nvim.git"
-MIN_NVIM_VERSION="0.10"
 
 info()  { echo "[INFO] $1"; }
 warn()  { echo "[WARN] $1"; }
@@ -23,45 +19,108 @@ error() { echo "[ERROR] $1" >&2; }
 # ----------------------------
 if ! command -v nvim &> /dev/null; then
     error "neovim is not installed. Install it first, then re-run this script."
-    error "See: https://github.com/neovim/neovim/releases"
     exit 1
 fi
 
-NVIM_VERSION=$(nvim --version | head -n1 | grep -oP '\d+\.\d+' | head -n1)
+NVIM_VERSION=$(nvim --version | head -n1 | grep -oP '\d+\.\d+' | head -n1 || echo "unknown")
 info "Found neovim version: ${NVIM_VERSION}"
 
 # ----------------------------
-# 2. Backup existing config if present
+# 2. Setup Kickstart in the repository
 # ----------------------------
-if [[ -d "$NVIM_CONFIG_DIR" ]]; then
-    BACKUP_DIR="${NVIM_CONFIG_DIR}.backup.$(date +%Y%m%d_%H%M%S)"
-    warn "Existing nvim config found at ${NVIM_CONFIG_DIR}"
-    warn "Backing it up to ${BACKUP_DIR}"
-    mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR"
+if [[ ! -d "$REPO_CONFIG_DIR" ]]; then
+    info "Cloning kickstart.nvim into local repository (${REPO_CONFIG_DIR})..."
+    git clone "$KICKSTART_REPO" "$REPO_CONFIG_DIR"
+    
+    # Remove the .git folder so you can track it in your own dotfiles repo
+    rm -rf "${REPO_CONFIG_DIR}/.git"
+
+    # NOUVEAU : On décommente la ligne require 'custom.plugins' !
+    info "Enabling custom plugins in init.lua..."
+    sed -i "s/-- require 'custom.plugins'/require 'custom.plugins'/g" "$REPO_CONFIG_DIR/init.lua"
+else
+    info "Kickstart config already exists in repository."
 fi
 
-# Also back up local share/state/cache dirs to avoid conflicts with old plugins
-for dir in "${HOME}/.local/share/nvim" "${HOME}/.local/state/nvim" "${HOME}/.cache/nvim"; do
-    if [[ -d "$dir" ]]; then
-        BACKUP="${dir}.backup.$(date +%Y%m%d_%H%M%S)"
-        warn "Backing up ${dir} to ${BACKUP}"
-        mv "$dir" "$BACKUP"
-    fi
-done
+# ----------------------------
+# 3. Inject VS Code IDE Layout (Neo-tree + Toggleterm)
+# ----------------------------
+CUSTOM_LUA_DIR="${REPO_CONFIG_DIR}/lua/custom"
+mkdir -p "$CUSTOM_LUA_DIR"
+
+IDE_PLUGIN_FILE="${CUSTOM_LUA_DIR}/plugins.lua"
+
+info "Injecting IDE layout configuration..."
+cat << 'EOF' > "$IDE_PLUGIN_FILE"
+-- Fonction utilitaire requise par vim.pack
+local function gh(repo) return 'https://github.com/' .. repo end
+
+-- 1. File Explorer (Neo-tree) et ses dépendances
+vim.pack.add { 
+  gh 'nvim-lua/plenary.nvim',
+  gh 'nvim-tree/nvim-web-devicons',
+  gh 'MunifTanjim/nui.nvim',
+  gh 'nvim-neo-tree/neo-tree.nvim'
+}
+
+require('neo-tree').setup({
+  close_if_last_window = true,
+  window = { width = 30 },
+})
+
+-- 2. Integrated Terminal (Toggleterm)
+vim.pack.add { gh 'akinsho/toggleterm.nvim' }
+
+require("toggleterm").setup({
+  size = 15,
+  open_mapping = [[<c-\>]], -- Ctrl + \ pour ouvrir/fermer rapidement
+  direction = 'horizontal',
+})
+
+-- 3. THE MAGIC IDE SHORTCUT (Space + i)
+vim.keymap.set('n', '<leader>i', function()
+  -- Ouvre l'explorateur à gauche
+  vim.cmd('Neotree show')
+  -- Ouvre le terminal en bas
+  vim.cmd('ToggleTerm')
+  -- Ramène le curseur sur le code
+  vim.cmd('wincmd k')
+  print("Mode IDE activé !")
+end, { desc = 'Activer le layout [I]DE (VS Code)' })
+
+-- Raccourci bonus juste pour l'explorateur
+vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Toggle [E]xplorer' })
+EOF
 
 # ----------------------------
-# 3. Clone kickstart.nvim
+# 4. Backup existing system config & create symlink
 # ----------------------------
-info "Cloning kickstart.nvim into ${NVIM_CONFIG_DIR}..."
-git clone "$KICKSTART_REPO" "$NVIM_CONFIG_DIR"
+if [[ -e "$NVIM_CONFIG_DIR" && ! -L "$NVIM_CONFIG_DIR" ]]; then
+    BACKUP_DIR="${NVIM_CONFIG_DIR}.backup.$(date +%Y%m%d_%H%M%S)"
+    warn "Existing raw nvim config found at ${NVIM_CONFIG_DIR}"
+    warn "Backing it up to ${BACKUP_DIR}"
+    mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR"
+    
+    # Also back up local share/state/cache dirs to avoid conflicts with old plugins
+    for dir in "${HOME}/.local/share/nvim" "${HOME}/.local/state/nvim" "${HOME}/.cache/nvim"; do
+        if [[ -d "$dir" ]]; then
+            BACKUP="${dir}.backup.$(date +%Y%m%d_%H%M%S)"
+            warn "Backing up ${dir} to ${BACKUP}"
+            mv "$dir" "$BACKUP"
+        fi
+    done
+elif [[ -L "$NVIM_CONFIG_DIR" ]]; then
+    info "Removing old symlink at ${NVIM_CONFIG_DIR}"
+    rm "$NVIM_CONFIG_DIR"
+fi
 
-# Remove the .git folder so it doesn't conflict with your own dotfiles repo
-rm -rf "${NVIM_CONFIG_DIR}/.git"
+info "Creating symlink: ${NVIM_CONFIG_DIR} -> ${REPO_CONFIG_DIR}"
+ln -sfn "$REPO_CONFIG_DIR" "$NVIM_CONFIG_DIR"
 
 # ----------------------------
-# 4. Headless plugin install
+# 5. Headless plugin install
 # ----------------------------
 info "Installing plugins (headless)..."
 nvim --headless +qa
 
-info "Done. Launch nvim to verify the setup, or run: nvim +checkhealth"
+info "Done. Launch nvim to verify the setup."
