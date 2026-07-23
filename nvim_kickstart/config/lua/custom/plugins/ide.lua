@@ -12,6 +12,13 @@ return {
       require("neo-tree").setup({
         close_if_last_window = true,
         window = { width = 30 },
+        filesystem = {
+          filtered_items = {
+              visible = true,
+              hide_dotfiles = true,
+              hide_gitignored = false,
+          }
+        }
       })
       -- Optional shortcut to just toggle the explorer
       vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Toggle [E]xplorer' })

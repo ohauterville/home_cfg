@@ -66,6 +66,13 @@ vim.pack.add {
 require('neo-tree').setup({
   close_if_last_window = true,
   window = { width = 30 },
+  filesystem = {
+      filtered_items = {
+          visible = true,
+          hide_dotfiles = true,
+          hide_gitignored = false,
+      }
+  }
 })
 
 -- 2. Integrated Terminal (Toggleterm)
@@ -90,6 +97,24 @@ end, { desc = 'Activer le layout [I]DE (VS Code)' })
 
 -- Raccourci bonus juste pour l'explorateur
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { desc = 'Toggle [E]xplorer' })
+
+-- 4. Plugin ROS 2 (nvim-ros2)
+-- Téléchargement du plugin
+vim.pack.add { gh 'ErickKramer/nvim-ros2' }
+
+-- Initialisation du plugin (Obligatoire)
+-- pcall évite un crash de Neovim si le plugin n'est pas encore téléchargé
+pcall(function()
+  require("nvim-ros2").setup({
+    -- Le plugin utilise Telescope par défaut, on laisse les options vides
+  })
+  
+  -- Injection dans Telescope
+  require("telescope").load_extension("ros2")
+end)
+
+-- Raccourci clavier personnalisé pour ouvrir le menu ROS (Espace + r)
+vim.keymap.set('n', '<leader>r', '<Cmd>Telescope ros2<CR>', { desc = 'Menu [R]OS 2' })
 EOF
 
 # ----------------------------
