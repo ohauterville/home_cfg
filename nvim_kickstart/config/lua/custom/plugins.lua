@@ -74,9 +74,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
--- ==========================================================
 -- (Conversion de la section "keys") : Raccourcis globaux
--- ==========================================================
 -- Base Pickers
 vim.keymap.set("n", "<leader>li", function() require("nvim-ros2").pickers.interfaces() end, { desc = "[ROS 2]: List interfaces" })
 vim.keymap.set("n", "<leader>ln", function() require("nvim-ros2").pickers.nodes() end, { desc = "[ROS 2]: List nodes" })
@@ -102,3 +100,28 @@ vim.keymap.set("n", "<leader>pi", function() require("nvim-ros2").pickers.sniper
 vim.keymap.set("n", "<leader>rt", "<cmd>RosTune<cr>", { desc = "Start ROS Tuner" })
 vim.keymap.set("n", "<leader>rs", "<cmd>RosTune resync<CR>", { desc = "[T]uner [R]esync" })
 vim.keymap.set("n", "<leader>rp", "<cmd>RosTune resync --pull<CR>", { desc = "[T]uner [P]ull Missing Params" })
+
+-- 5. Git Integration (Neogit & Diffview)
+-- Téléchargement des plugins (Telescope et Plenary sont déjà présents)
+vim.pack.add { 
+  'https://github.com/sindrets/diffview.nvim',
+  'https://github.com/NeogitOrg/neogit' 
+}
+
+-- Initialisation de Neogit
+require("neogit").setup({
+  -- options spécifiques ici
+})
+
+-- Raccourcis clavier (conversion du "remap" en "vim.keymap.set" natif)
+vim.keymap.set("n", "<leader>ng", "<CMD>Neogit<CR>", { desc = "Open [N]eo[g]it" })
+vim.keymap.set("n", "<leader>dv", "<CMD>DiffviewOpen<CR>", { desc = "Open [D]iff[v]iew" })
+vim.keymap.set("n", "<leader>dfh", "<CMD>DiffviewFileHistory %<CR>", { desc = "[D]iffview [F]ile [H]istory" })
+
+-- ==========================================
+-- Navigation rapide entre les buffers (fichiers)
+-- Maj+l (L) pour aller au buffer suivant
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer Suivant" })
+-- Maj+h (H) pour aller au buffer précédent
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Buffer Précédent" })
+vim.keymap.set("n", "<leader>c", "<cmd>bdelete<CR>", { desc = "[C]lose Buffer" })
