@@ -129,6 +129,16 @@ export PATH=$PATH:/usr/local/go/bin
 # STARSHIP
 eval "$(starship init bash)"
 
+# ===
 # FZF
+# ===
+# Define the preview command:
+# If the selected item is a directory, use 'tree'.
+# Otherwise, use 'batcat' (or fallback to 'cat') for files.
+export FZF_PREVIEW_CMD="if [ -d {} ]; then tree -C {} | head -200; else batcat --style=numbers --color=always {} 2>/dev/null || cat {}; fi"
+# Apply the preview command to the **<TAB> completion cd **+Tab, nvim **+Tab
+export FZF_COMPLETION_OPTS="--preview \"$FZF_PREVIEW_CMD\""
+# Apply the same preview command to Ctrl+T (file finder)
+export FZF_CTRL_T_OPTS="--preview \"$FZF_PREVIEW_CMD\""
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 eval "$(fzf --bash)"

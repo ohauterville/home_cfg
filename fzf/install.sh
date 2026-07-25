@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+echo "Starting install deps..."
+sudo apt install -y bat tree
+
 echo "Starting fzf installation..."
 
 # Check if fzf is already installed
