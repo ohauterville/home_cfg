@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting global installation process..."
 
+# to allow copy paste between apps
+sudo apt install xclip -y
+
 # Find all 'install.sh' files in subdirectories (minimum depth 2 to avoid the root dir)
 # We store them in an array to handle paths with spaces safely
 mapfile -t INSTALL_SCRIPTS < <(find "$ROOT_DIR" -mindepth 2 -name "install.sh" -type f)

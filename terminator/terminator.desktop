@@ -18,5 +18,5 @@ Exec=terminator
 TargetEnvironment=Unity
 
 [Desktop Action Tmux]
-Name=Open with Tmux
-Exec=terminator -p tmux
+Name=Open classic profile
+Exec=terminator -p classic
