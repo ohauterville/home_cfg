@@ -125,3 +125,10 @@ vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer Suivant" })
 -- Maj+h (H) pour aller au buffer précédent
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Buffer Précédent" })
 vim.keymap.set("n", "<leader>c", "<cmd>bdelete<CR>", { desc = "[C]lose Buffer" })
+
+-- tmux navigator
+vim.pack.add { 'https://github.com/christoomey/vim-tmux-navigator' }
+vim.keymap.set('n', '<C-h>', ':TmuxNavigateLeft<CR>')
+vim.keymap.set('n', '<C-j>', ':TmuxNavigateDown<CR>')
+vim.keymap.set('n', '<C-k>', ':TmuxNavigateUp<CR>')
+vim.keymap.set('n', '<C-l>', ':TmuxNavigateRight<CR>')
