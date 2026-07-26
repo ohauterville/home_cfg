@@ -142,3 +142,6 @@ export FZF_COMPLETION_OPTS="--preview \"$FZF_PREVIEW_CMD\""
 export FZF_CTRL_T_OPTS="--preview \"$FZF_PREVIEW_CMD\""
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 eval "$(fzf --bash)"
+
+# Initialize zoxide (smarter cd command)
+eval "$(zoxide init --cmd cd bash)"
