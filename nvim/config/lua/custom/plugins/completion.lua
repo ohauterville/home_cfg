@@ -12,9 +12,14 @@ vim.pack.add {
 
 -- 2. Chargement des snippets préconfigurés (friendly-snippets)
 -- pcall évite un crash si le plugin n'est pas encore téléchargé
-pcall(function()
+-- pcall(function()
+  -- Charge les snippets communautaires (friendly-snippets)
   require("luasnip.loaders.from_vscode").lazy_load()
-end)
+  -- Charge my own local snippets
+  require("luasnip.loaders.from_vscode").lazy_load({ 
+    paths = { vim.fn.stdpath("config") .. "/lua/custom/snippets" } 
+  })
+-- end)
 
 -- 3. Configuration du moteur d'autocomplétion
 pcall(function()
@@ -65,3 +70,9 @@ pcall(function()
     })
   })
 end)
+
+vim.pack.add({
+  { src = "https://github.com/benfowler/telescope-luasnip.nvim" },
+})
+require('telescope').load_extension('luasnip')
+vim.keymap.set('n', '<leader>sn', '<cmd>Telescope luasnip<cr>', { desc = '[S]nippets [S]earch' })
