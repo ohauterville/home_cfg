@@ -28,13 +28,15 @@ if ! command -v nvim &> /dev/null; then
 
     # Download and extract the official tar.gz release
     TMP_DIR=$(mktemp -d)
-    curl -sSLo "${TMP_DIR}/nvim-linux64.tar.gz" "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+    
+    # LA CORRECTION EST ICI : Le nom officiel du fichier est maintenant nvim-linux-x86_64
+    curl -sSLo "${TMP_DIR}/nvim-linux-x86_64.tar.gz" "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz"
 
     # Clean old opt dir if it exists and extract
     rm -rf "$NVIM_OPT_DIR"
     mkdir -p "$(dirname "$NVIM_OPT_DIR")"
-    tar -C "${HOME}/.local/opt" -xzf "${TMP_DIR}/nvim-linux64.tar.gz"
-    mv "${HOME}/.local/opt/nvim-linux64" "$NVIM_OPT_DIR"
+    tar -C "${HOME}/.local/opt" -xzf "${TMP_DIR}/nvim-linux-x86_64.tar.gz"
+    mv "${HOME}/.local/opt/nvim-linux-x86_64" "$NVIM_OPT_DIR"
 
     # Symlink the binary
     ln -sf "${NVIM_OPT_DIR}/bin/nvim" "${INSTALL_DIR}/nvim"
