@@ -12,13 +12,14 @@ vim.pack.add {
 
 -- 2. Chargement des snippets préconfigurés (friendly-snippets)
 -- pcall évite un crash si le plugin n'est pas encore téléchargé
+require('luasnip').setup({})
 -- pcall(function()
-  -- Charge les snippets communautaires (friendly-snippets)
-  require("luasnip.loaders.from_vscode").lazy_load()
-  -- Charge my own local snippets
-  require("luasnip.loaders.from_vscode").lazy_load({ 
-    paths = { vim.fn.stdpath("config") .. "/lua/custom/snippets" } 
-  })
+-- Charge les snippets communautaires (friendly-snippets)
+require("luasnip.loaders.from_vscode").lazy_load()
+-- Charge my own local snippets
+require("luasnip.loaders.from_vscode").lazy_load({ 
+  paths = { vim.fn.stdpath("config") .. "/lua/custom/snippets" } 
+})
 -- end)
 
 -- 3. Configuration du moteur d'autocomplétion
