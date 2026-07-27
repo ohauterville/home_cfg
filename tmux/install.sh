@@ -51,3 +51,4 @@ else
 fi
 
 echo "tmux configuration finished."
+echo "Please kill-server then Prefix + I and Prefix+r to apply changes."
