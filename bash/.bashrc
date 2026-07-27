@@ -147,3 +147,5 @@ eval "$(fzf --bash)"
 
 # Initialize zoxide (smarter cd command)
 eval "$(zoxide init --cmd cd bash)"
+# Just autocomplete
+eval "$(just --completions bash)"
