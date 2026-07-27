@@ -9,6 +9,7 @@
     use_custom_command = True
     custom_command = tmux new-session -A -s main
     show_titlebar = False
+    copy_on_selection = True
   [[classic]]
     cursor_color = "#aaaaaa"
     font = JetBrainsMono Nerd Font 11
