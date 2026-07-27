@@ -122,6 +122,8 @@ fi
 # TODO: remove for other laptops
 source /opt/unilim/profile/.bashrc
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # APPTAINER
 export PATH=$PATH:/usr/local/go/bin
 . "$HOME/.cargo/env"

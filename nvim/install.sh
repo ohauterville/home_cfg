@@ -1,117 +1,80 @@
 #!/usr/bin/env bash
 #
-# install_nvim.sh - Install Neovim (latest stable) via AppImage
+# install.sh - Install Neovim and link personal configuration
 #
-# No root privileges required. Installs into ~/.local/bin.
-#
-# Usage:
-#   ./install_nvim.sh                # install into ~/.local/bin
-#   ./install_nvim.sh --to /opt/nvim # install into a custom directory (may require sudo)
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# On suppose que tes fichiers (init.lua, etc.) sont dans le dossier 'config' à côté de ce script
+REPO_CONFIG_DIR="${SCRIPT_DIR}/config"
+NVIM_CONFIG_DIR="${HOME}/.config/nvim"
 INSTALL_DIR="${HOME}/.local/bin"
-NVIM_URL="https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage"
 
 info()  { echo "[INFO] $1"; }
 warn()  { echo "[WARN] $1"; }
 error() { echo "[ERROR] $1" >&2; }
 
-# ----------------------------
-# Parse arguments
-# ----------------------------
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --to)
-            INSTALL_DIR="$2"
-            shift 2
-            ;;
-        -h|--help)
-            echo "Usage: $0 [--to /install/path]"
-            exit 0
-            ;;
-        *)
-            error "Unknown option: $1"
-            exit 1
-            ;;
-    esac
-done
+echo "Starting Neovim installation and configuration..."
 
 # ----------------------------
-# Check dependencies
+# 1. Install Neovim (if not present)
 # ----------------------------
-if ! command -v curl &> /dev/null; then
-    error "curl is not installed. Install it with: sudo apt install curl"
-    exit 1
-fi
+if ! command -v nvim &> /dev/null; then
+    info "Neovim not found. Installing latest stable version (tar.gz) to ~/.local/bin..."
 
-# ----------------------------
-# Check for existing install
-# ----------------------------
-if command -v nvim &> /dev/null; then
-    CURRENT_VERSION=$(nvim --version | head -n1)
-    warn "neovim is already installed: ${CURRENT_VERSION}"
-    read -rp "Reinstall/update anyway? [y/N] " REPLY
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        info "Installation cancelled."
-        exit 0
-    fi
-fi
+    mkdir -p "$INSTALL_DIR"
+    NVIM_OPT_DIR="${HOME}/.local/opt/nvim"
 
-# ----------------------------
-# Download and extract AppImage
-# ----------------------------
-info "Downloading Neovim AppImage..."
-TMP_DIR=$(mktemp -d)
-curl -Lo "${TMP_DIR}/nvim.appimage" "$NVIM_URL"
-chmod +x "${TMP_DIR}/nvim.appimage"
+    # Download and extract the official tar.gz release
+    TMP_DIR=$(mktemp -d)
+    curl -sSLo "${TMP_DIR}/nvim-linux64.tar.gz" "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
 
-info "Extracting AppImage..."
-(
-    cd "$TMP_DIR"
-    ./nvim.appimage --appimage-extract > /dev/null
-)
+    # Clean old opt dir if it exists and extract
+    rm -rf "$NVIM_OPT_DIR"
+    mkdir -p "$(dirname "$NVIM_OPT_DIR")"
+    tar -C "${HOME}/.local/opt" -xzf "${TMP_DIR}/nvim-linux64.tar.gz"
+    mv "${HOME}/.local/opt/nvim-linux64" "$NVIM_OPT_DIR"
 
-# ----------------------------
-# Install into target location
-# ----------------------------
-NVIM_OPT_DIR="${HOME}/.local/opt/nvim"
-mkdir -p "$(dirname "$NVIM_OPT_DIR")"
-rm -rf "$NVIM_OPT_DIR"
-mv "${TMP_DIR}/squashfs-root" "$NVIM_OPT_DIR"
+    # Symlink the binary
+    ln -sf "${NVIM_OPT_DIR}/bin/nvim" "${INSTALL_DIR}/nvim"
 
-mkdir -p "$INSTALL_DIR"
-ln -sf "${NVIM_OPT_DIR}/AppRun" "${INSTALL_DIR}/nvim"
-
-rm -rf "$TMP_DIR"
-
-# ----------------------------
-# Add to PATH if needed
-# ----------------------------
-add_to_path_if_missing() {
-    local rc_file="$1"
-    if [[ -f "$rc_file" ]] && ! grep -qF "$INSTALL_DIR" "$rc_file"; then
-        info "Adding ${INSTALL_DIR} to PATH in ${rc_file}"
-        echo "" >> "$rc_file"
-        echo "# Added by install_nvim.sh" >> "$rc_file"
-        echo "export PATH=\"\$PATH:${INSTALL_DIR}\"" >> "$rc_file"
-    fi
-}
-
-add_to_path_if_missing "${HOME}/.bashrc"
-add_to_path_if_missing "${HOME}/.zshrc"
-
-# ----------------------------
-# Verify
-# ----------------------------
-if [[ -x "${INSTALL_DIR}/nvim" ]]; then
-    INSTALLED_VERSION=$("${INSTALL_DIR}/nvim" --version | head -n1)
-    info "Neovim installed successfully: ${INSTALLED_VERSION}"
-    info "Binary location: ${INSTALL_DIR}/nvim"
-    warn "Reload your shell or run: source ~/.bashrc"
+    rm -rf "$TMP_DIR"
+    info "Neovim binary installed successfully."
 else
-    error "Installation failed: binary not found at ${INSTALL_DIR}/nvim"
+    info "Neovim is already installed: $(nvim --version | head -n1 | grep -oP '\d+\.\d+\.\d+')"
+fi
+
+# Make sure the local bin is in PATH for the rest of this script
+export PATH="$INSTALL_DIR:$PATH"
+
+# ----------------------------
+# 2. Symlink Configuration
+# ----------------------------
+if [[ ! -d "$REPO_CONFIG_DIR" ]]; then
+    error "Configuration directory not found at $REPO_CONFIG_DIR."
+    error "Make sure your init.lua is inside a 'config' directory next to this script!"
     exit 1
 fi
 
-info "Done. Run 'nvim' to start."
+if [[ -e "$NVIM_CONFIG_DIR" && ! -L "$NVIM_CONFIG_DIR" ]]; then
+    BACKUP_DIR="${NVIM_CONFIG_DIR}.backup.$(date +%Y%m%d_%H%M%S)"
+    warn "Existing raw nvim config found at ${NVIM_CONFIG_DIR}"
+    warn "Backing it up to ${BACKUP_DIR}"
+    mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR"
+elif [[ -L "$NVIM_CONFIG_DIR" ]]; then
+    info "Removing old symlink at ${NVIM_CONFIG_DIR}"
+    rm "$NVIM_CONFIG_DIR"
+fi
+
+info "Creating symlink: ${NVIM_CONFIG_DIR} -> ${REPO_CONFIG_DIR}"
+ln -sfn "$REPO_CONFIG_DIR" "$NVIM_CONFIG_DIR"
+
+# ----------------------------
+# 3. Headless plugin install/update
+# ----------------------------
+info "Running headless plugin update..."
+# Utilisation de la nouvelle commande vim.pack pour installer les plugins manquants
+nvim --headless "+lua vim.pack.update()" +qa 2>/dev/null || true
+
+info "Neovim installation and configuration finished!"
