@@ -45,7 +45,7 @@ fi
 # 5. link scripts
 if [ -d "$SCRIPT_DIR/scripts" ]; then
     echo "Creating symlink for scripts..."
-    ln -sf "$SCRIPT_DIR/scripts" "$HOME/.tmux/scripts"
+    ln -sfn "$SCRIPT_DIR/scripts" "$HOME/.tmux/scripts"
 else
     echo "Warning: No scripts found in $SCRIPT_DIR. Skipping symlink."
 fi
