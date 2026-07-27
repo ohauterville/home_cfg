@@ -51,26 +51,31 @@ fi
 export PATH="$INSTALL_DIR:$PATH"
 
 # ----------------------------
-# 2. Symlink Configuration
+# 2. Symlink Configuration (Inside real directory to avoid vim.pack bugs)
 # ----------------------------
 if [[ ! -d "$REPO_CONFIG_DIR" ]]; then
     error "Configuration directory not found at $REPO_CONFIG_DIR."
-    error "Make sure your init.lua is inside a 'config' directory next to this script!"
     exit 1
 fi
 
+# Backup if a real directory already exists (and is not empty/just symlinks)
 if [[ -e "$NVIM_CONFIG_DIR" && ! -L "$NVIM_CONFIG_DIR" ]]; then
     BACKUP_DIR="${NVIM_CONFIG_DIR}.backup.$(date +%Y%m%d_%H%M%S)"
     warn "Existing raw nvim config found at ${NVIM_CONFIG_DIR}"
     warn "Backing it up to ${BACKUP_DIR}"
     mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR"
 elif [[ -L "$NVIM_CONFIG_DIR" ]]; then
-    info "Removing old symlink at ${NVIM_CONFIG_DIR}"
+    info "Removing old directory symlink at ${NVIM_CONFIG_DIR}"
     rm "$NVIM_CONFIG_DIR"
 fi
 
-info "Creating symlink: ${NVIM_CONFIG_DIR} -> ${REPO_CONFIG_DIR}"
-ln -sfn "$REPO_CONFIG_DIR" "$NVIM_CONFIG_DIR"
+# Create a REAL directory
+mkdir -p "$NVIM_CONFIG_DIR"
+
+info "Creating symlinks inside ${NVIM_CONFIG_DIR}"
+# Link the core Kickstart files
+ln -sf "${REPO_CONFIG_DIR}/init.lua" "${NVIM_CONFIG_DIR}/init.lua"
+ln -sfn "${REPO_CONFIG_DIR}/lua" "${NVIM_CONFIG_DIR}/lua"
 
 # ----------------------------
 # 3. Headless plugin install/update
