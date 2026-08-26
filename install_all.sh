@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "Starting global installation process..."
 
 # to allow copy paste between apps
-sudo apt install xclip -y
+sudo apt install -y xclip xsel wl-clipboard
 
 # Find all 'install.sh' files in subdirectories (minimum depth 2 to avoid the root dir)
 # We store them in an array to handle paths with spaces safely
