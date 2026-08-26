@@ -1,3 +1,9 @@
+[global_config]
+  always_split_with_profile = True
+[keybindings]
+[profiles]
+  [[default]]
+    cursor_color = "#aaaaaa"
 [Desktop Entry]
 Name=Terminator
 Comment=Multiple terminals in one window
