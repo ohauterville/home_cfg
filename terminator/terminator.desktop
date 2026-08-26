@@ -10,7 +10,8 @@ StartupNotify=true
 X-Ubuntu-Gettext-Domain=terminator
 X-Ayatana-Desktop-Shortcuts=NewWindow;
 Keywords=terminal;shell;prompt;command;commandline;
-Actions=Tmux;
+# open in normal mode :
+Actions=Classic;
 
 [NewWindow Shortcut Group]
 Name=Open a New Window
@@ -18,5 +19,5 @@ Exec=terminator
 TargetEnvironment=Unity
 
 [Desktop Action Classic]
-Name=Open classic profile
+Name=Open classic profile (wo Tmux)
 Exec=terminator -p classic
