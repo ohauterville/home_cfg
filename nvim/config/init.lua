@@ -1000,3 +1000,15 @@ end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- my own config
+-- ============================================================
+-- FILETYPES PERSONNALISÉS
+-- ============================================================
+do 
+vim.filetype.add({
+  extension = {
+    def = 'bash', -- Force les fichiers .def (Apptainer) à utiliser la coloration Bash
+  },
+})
+end
