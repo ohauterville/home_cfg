@@ -15,6 +15,21 @@ info()  { echo "[INFO] $1"; }
 warn()  { echo "[WARN] $1"; }
 error() { echo "[ERROR] $1" >&2; }
 
+# ----------------------------
+# 0. Install Dependencies
+# ----------------------------
+info "Checking Neovim system dependencies..."
+if ! command -v gcc &> /dev/null || ! command -v npm &> /dev/null || ! command -v rg &> /dev/null; then
+    info "Installing missing dependencies via apt (will ask for sudo)..."
+    sudo apt-update -y || true
+    sudo apt install -y build-essential gcc g++ npm ripgrep fd-find xclip
+    
+    info "Installing tree-sitter-cli globally..."
+    sudo npm install -g tree-sitter-cli@0.22.5 #compatible ubuntu 22
+else
+    info "Dependencies are already installed."
+fi
+
 echo "Starting Neovim installation and configuration..."
 
 # ----------------------------
