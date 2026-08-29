@@ -3,7 +3,8 @@
 -- ==========================================================
 vim.pack.add { 
   'https://github.com/akinsho/bufferline.nvim',
-  'https://github.com/nvim-tree/nvim-web-devicons' -- (Déjà installé normalement)
+  'https://github.com/nvim-tree/nvim-web-devicons', -- (Déjà installé normalement)
+  'https://github.com/famiu/bufdelete.nvim'
 }
 
 pcall(function()
@@ -27,5 +28,5 @@ pcall(function()
   vim.keymap.set('n', '<S-h>', '<Cmd>BufferLineCyclePrev<CR>', { desc = 'Buffer précédent' })
   vim.keymap.set('n', '<S-l>', '<Cmd>BufferLineCycleNext<CR>', { desc = 'Buffer suivant' })
   -- Raccourci pour fermer le fichier actuel (Espace + c)
-  vim.keymap.set('n', '<leader>c', '<Cmd>bd<CR>', { desc = '[C]lose Buffer' })
+  vim.keymap.set('n', '<leader>c', '<Cmd>Bdelete<CR>', { desc = '[C]lose Buffer (Safe)' })
 end)
