@@ -35,6 +35,28 @@ vim.keymap.set('n', '<leader>i', function()
   print 'IDE Mode activated!'
 end, { desc = 'Activate [I]DE Layout (VS Code style)' })
 
+-- ==========================================================
+-- LECTURE MARKDOWN DANS LE TERMINAL
+-- ==========================================================
+vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
+
+pcall(function()
+  require('render-markdown').setup({
+    heading = {
+      sign = true,
+      icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+    },
+    code = {
+      sign = true,
+      width = 'block',
+      right_pad = 1,
+    },
+  })
+  
+  -- Raccourci pour activer/désactiver le rendu Markdown (Espace + m)
+  vim.keymap.set('n', '<leader>m', '<Cmd>RenderMarkdown toggle<CR>', { desc = 'Toggle [M]arkdown Render' })
+end)
+
 -- 3. nvim-ros2
 vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
