@@ -49,9 +49,12 @@ if ! command -v devpod &> /dev/null; then
 
     if [[ -n "$DEVPOD_ARCH" ]]; then
         mkdir -p "$INSTALL_DIR"
+
+        # VERSION PINNING : On fixe la version pour garantir la compatibilité avec remote-nvim
+        DEVPOD_VERSION="v0.5.21" 
+        info "Downloading DevPod ${DEVPOD_VERSION}..."        
         
-        # Téléchargement direct et sécurisé dans le dossier de destination
-        curl -fsSLo "$INSTALL_DIR/devpod" "https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-${DEVPOD_ARCH}"
+        curl -fsSLo "$INSTALL_DIR/devpod" "https://github.com/loft-sh/devpod/releases/download/${DEVPOD_VERSION}/devpod-linux-${DEVPOD_ARCH}"
         chmod +x "$INSTALL_DIR/devpod"
         
         info "Devpod installed successfully."
