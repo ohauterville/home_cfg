@@ -30,6 +30,36 @@ else
     info "Dependencies are already installed."
 fi
 
+# ----------------------------
+# 0. Install devpod for the plugin remote.nvim
+# ----------------------------
+if ! command -v devpod &> /dev/null; then
+    info "Installing devpod for remote-nvim..."
+    
+    # Détection de l'architecture pour DevPod (amd64 ou arm64)
+    ARCH=$(uname -m)
+    if [[ "$ARCH" == "x86_64" ]]; then
+        DEVPOD_ARCH="amd64"
+    elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+        DEVPOD_ARCH="arm64"
+    else
+        warn "Architecture $ARCH non supportée par DevPod. Ignoré."
+        DEVPOD_ARCH=""
+    fi
+
+    if [[ -n "$DEVPOD_ARCH" ]]; then
+        mkdir -p "$INSTALL_DIR"
+        
+        # Téléchargement direct et sécurisé dans le dossier de destination
+        curl -fsSLo "$INSTALL_DIR/devpod" "https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-${DEVPOD_ARCH}"
+        chmod +x "$INSTALL_DIR/devpod"
+        
+        info "Devpod installed successfully."
+    fi
+else 
+    info "Devpod is already installed."
+fi
+
 echo "Starting Neovim installation and configuration..."
 
 # ----------------------------
