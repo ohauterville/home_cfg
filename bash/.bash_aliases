@@ -11,3 +11,5 @@ alias appstart="apptainer instance start --bind ./home:/home/apptainer"
 alias appstop="apptainer instance stop"
 #terminator tmux
 alias ttmux="tmux new-session -A -s main"
+#Docker
+alias dc="docker compose"
