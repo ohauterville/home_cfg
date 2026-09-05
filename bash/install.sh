@@ -8,7 +8,7 @@ echo "Starting bash configuration..."
 
 # 1. Symlink for bash_aliases
 TARGET_ALIASES="$HOME/.bash_aliases"
-SOURCE_ALIASES="$SCRIPT_DIR/bash_aliases"
+SOURCE_ALIASES="$SCRIPT_DIR/.bash_aliases"
 
 if [ -f "$SOURCE_ALIASES" ]; then
     echo "Creating symlink for bash aliases..."
