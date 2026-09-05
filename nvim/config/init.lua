@@ -529,7 +529,14 @@ do
   local builtin = require 'telescope.builtin'
   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
   vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-  vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+  -- vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+  vim.keymap.set('n', '<leader>sf', function() builtin.find_files { hidden = true } end, { desc = '[S]earch [F]iles (incl. hidden)' })
+  vim.keymap.set(
+    'n',
+    '<leader>sF',
+    function() builtin.find_files { hidden = true, no_ignore = true } end,
+    { desc = '[S]earch [F]iles (ALL, bypass .gitignore)' }
+  )
   vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
   vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
   vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -824,7 +831,7 @@ do
   vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })
 end
 
--- I commented this all section to avoid conflict with 
+-- I commented this all section to avoid conflict with
 -- my custom completion.lua
 -- -- ============================================================
 -- -- SECTION 8: AUTOCOMPLETE & SNIPPETS
@@ -1005,10 +1012,10 @@ end
 -- ============================================================
 -- FILETYPES PERSONNALISÉS
 -- ============================================================
-do 
-vim.filetype.add({
-  extension = {
-    def = 'bash', -- Force les fichiers .def (Apptainer) à utiliser la coloration Bash
-  },
-})
+do
+  vim.filetype.add {
+    extension = {
+      def = 'bash', -- Force les fichiers .def (Apptainer) à utiliser la coloration Bash
+    },
+  }
 end
