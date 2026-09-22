@@ -7,6 +7,10 @@ echo "Starting global installation process..."
 
 # to allow copy paste between apps
 sudo apt install -y xclip xsel wl-clipboard
+# btop is better htop
+sudo apt install btop
+# lnav is a log navigator
+sudo apt install lnav
 
 # Find all 'install.sh' files in subdirectories (minimum depth 2 to avoid the root dir)
 # We store them in an array to handle paths with spaces safely
