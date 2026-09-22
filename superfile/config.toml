@@ -1,0 +1,8 @@
+# Éditeur par défaut pour ouvrir les fichiers texte
+editor = "nvim"
+
+# Thème cohérent avec ta barre Tmux et Neovim
+theme = "catppuccin-mocha"
+
+# Rend le fond transparent pour garder la couleur de Terminator/Tmux
+transparent_background = true
