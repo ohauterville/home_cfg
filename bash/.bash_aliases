@@ -20,3 +20,5 @@ if command -v eza &> /dev/null; then
     alias ll="eza --icons --git -la"
     alias lt="eza --icons --git --tree --level=2" # Affiche un arbre de dossiers
 fi
+# lnav for ros
+alias rlog="lnav ~/.ros/log/latest/"
