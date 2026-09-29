@@ -1,0 +1,12 @@
+[Unit]
+Description=GNOME Wallpaper Slideshow
+After=graphical-session.target
+
+[Service]
+# LA CORRECTION EST ICI :
+ExecStart=%h/ws/github_perso/home_cfg/wallpaper/slideshow.sh
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

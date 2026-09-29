@@ -41,7 +41,7 @@ end, { desc = 'Activate [I]DE Layout (VS Code style)' })
 vim.pack.add { 'https://github.com/MeanderingProgrammer/render-markdown.nvim' }
 
 pcall(function()
-  require('render-markdown').setup({
+  require('render-markdown').setup {
     heading = {
       sign = true,
       icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
@@ -51,8 +51,8 @@ pcall(function()
       width = 'block',
       right_pad = 1,
     },
-  })
-  
+  }
+
   -- Raccourci pour activer/désactiver le rendu Markdown (Espace + m)
   vim.keymap.set('n', '<leader>m', '<Cmd>RenderMarkdown toggle<CR>', { desc = 'Toggle [M]arkdown Render' })
 end)
@@ -77,76 +77,76 @@ require('nvim-ros2').setup {
 -- ==========================================================
 -- (Conversion de la section "config") : Autocommands RPC
 -- ==========================================================
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "ROS_CALL_*",
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = 'ROS_CALL_*',
   callback = function(args)
     local bufnr = args.buf
     local map_opts = { buffer = bufnr, silent = true }
 
     -- Execute the payload
-    vim.keymap.set("n", "<CR>", "<cmd>RosRpc send<CR>", vim.tbl_extend("force", map_opts, { desc = "Send RPC Call" }))
+    vim.keymap.set('n', '<CR>', '<cmd>RosRpc send<CR>', vim.tbl_extend('force', map_opts, { desc = 'Send RPC Call' }))
     -- Gracefully cancel
-    vim.keymap.set("n", "s", "<cmd>RosRpc stop<CR>", vim.tbl_extend("force", map_opts, { desc = "Stop RPC Call" }))
+    vim.keymap.set('n', 's', '<cmd>RosRpc stop<CR>', vim.tbl_extend('force', map_opts, { desc = 'Stop RPC Call' }))
     -- Save with metadata
-    vim.keymap.set("n", "<leader>s", "<cmd>RosRpc save<CR>", vim.tbl_extend("force", map_opts, { desc = "Save Payload" }))
+    vim.keymap.set('n', '<leader>s', '<cmd>RosRpc save<CR>', vim.tbl_extend('force', map_opts, { desc = 'Save Payload' }))
     -- Smart Load compatible payloads
-    vim.keymap.set("n", "<leader>l", function() require("nvim-ros2.pickers").saved_payloads() end, vim.tbl_extend("force", map_opts, { desc = "Load Payload" }))
+    vim.keymap.set('n', '<leader>l', function() require('nvim-ros2.pickers').saved_payloads() end, vim.tbl_extend('force', map_opts, { desc = 'Load Payload' }))
     -- Quick exit
-    vim.keymap.set("n", "q", "<cmd>q<CR>", vim.tbl_extend("force", map_opts, { desc = "Close RPC Buffer" }))
+    vim.keymap.set('n', 'q', '<cmd>q<CR>', vim.tbl_extend('force', map_opts, { desc = 'Close RPC Buffer' }))
   end,
 })
 
 -- (Conversion de la section "keys") : Raccourcis globaux
 -- Base Pickers
-vim.keymap.set("n", "<leader>li", function() require("nvim-ros2").pickers.interfaces() end, { desc = "[ROS 2]: List interfaces" })
-vim.keymap.set("n", "<leader>ln", function() require("nvim-ros2").pickers.nodes() end, { desc = "[ROS 2]: List nodes" })
-vim.keymap.set("n", "<leader>la", function() require("nvim-ros2").pickers.actions() end, { desc = "[ROS 2]: List actions" })
-vim.keymap.set("n", "<leader>lt", function() require("nvim-ros2").pickers.topics_info() end, { desc = "[ROS 2]: List topics with info" })
-vim.keymap.set("n", "<leader>le", function() require("nvim-ros2").pickers.topics_echo() end, { desc = "[ROS 2]: List topics with echo" })
-vim.keymap.set("n", "<leader>ls", function() require("nvim-ros2").pickers.services() end, { desc = "[ROS 2]: List services" })
+vim.keymap.set('n', '<leader>li', function() require('nvim-ros2').pickers.interfaces() end, { desc = '[ROS 2]: List interfaces' })
+vim.keymap.set('n', '<leader>ln', function() require('nvim-ros2').pickers.nodes() end, { desc = '[ROS 2]: List nodes' })
+vim.keymap.set('n', '<leader>la', function() require('nvim-ros2').pickers.actions() end, { desc = '[ROS 2]: List actions' })
+vim.keymap.set('n', '<leader>lt', function() require('nvim-ros2').pickers.topics_info() end, { desc = '[ROS 2]: List topics with info' })
+vim.keymap.set('n', '<leader>le', function() require('nvim-ros2').pickers.topics_echo() end, { desc = '[ROS 2]: List topics with echo' })
+vim.keymap.set('n', '<leader>ls', function() require('nvim-ros2').pickers.services() end, { desc = '[ROS 2]: List services' })
 
 -- Workspace Navigator
-vim.keymap.set("n", "<leader>fp", function() require("nvim-ros2").pickers.packages() end, { desc = "[F]ind ROS2 [P]ackage" })
-vim.keymap.set("n", "<leader>pf", function() require("nvim-ros2").pickers.find_files_package() end, { desc = "Find in Package" })
-vim.keymap.set("n", "<leader>pg", function() require("nvim-ros2").pickers.grep_package() end, { desc = "Grep in Package" })
-vim.keymap.set("n", "<leader>pc", function() require("nvim-ros2").pickers.edit_cmake() end, { desc = "Edit CMakeLists.txt" })
-vim.keymap.set("n", "<leader>pp", function() require("nvim-ros2").pickers.edit_package_xml() end, { desc = "Edit package.xml" })
+vim.keymap.set('n', '<leader>fp', function() require('nvim-ros2').pickers.packages() end, { desc = '[F]ind ROS2 [P]ackage' })
+vim.keymap.set('n', '<leader>pf', function() require('nvim-ros2').pickers.find_files_package() end, { desc = 'Find in Package' })
+vim.keymap.set('n', '<leader>pg', function() require('nvim-ros2').pickers.grep_package() end, { desc = 'Grep in Package' })
+vim.keymap.set('n', '<leader>pc', function() require('nvim-ros2').pickers.edit_cmake() end, { desc = 'Edit CMakeLists.txt' })
+vim.keymap.set('n', '<leader>pp', function() require('nvim-ros2').pickers.edit_package_xml() end, { desc = 'Edit package.xml' })
 
 -- Snipers
-vim.keymap.set("n", "<leader>pm", function() require("nvim-ros2").pickers.sniper("msg") end, { desc = "Sniper: msg/" })
-vim.keymap.set("n", "<leader>ps", function() require("nvim-ros2").pickers.sniper("srv") end, { desc = "Sniper: srv/" })
-vim.keymap.set("n", "<leader>pa", function() require("nvim-ros2").pickers.sniper("action") end, { desc = "Sniper: action/" })
-vim.keymap.set("n", "<leader>pi", function() require("nvim-ros2").pickers.sniper("include") end, { desc = "Sniper: include/" })
+vim.keymap.set('n', '<leader>pm', function() require('nvim-ros2').pickers.sniper 'msg' end, { desc = 'Sniper: msg/' })
+vim.keymap.set('n', '<leader>ps', function() require('nvim-ros2').pickers.sniper 'srv' end, { desc = 'Sniper: srv/' })
+vim.keymap.set('n', '<leader>pa', function() require('nvim-ros2').pickers.sniper 'action' end, { desc = 'Sniper: action/' })
+vim.keymap.set('n', '<leader>pi', function() require('nvim-ros2').pickers.sniper 'include' end, { desc = 'Sniper: include/' })
 
 -- Tuner
-vim.keymap.set("n", "<leader>rt", "<cmd>RosTune<cr>", { desc = "Start ROS Tuner" })
-vim.keymap.set("n", "<leader>rs", "<cmd>RosTune resync<CR>", { desc = "[T]uner [R]esync" })
-vim.keymap.set("n", "<leader>rp", "<cmd>RosTune resync --pull<CR>", { desc = "[T]uner [P]ull Missing Params" })
+vim.keymap.set('n', '<leader>rt', '<cmd>RosTune<cr>', { desc = 'Start ROS Tuner' })
+vim.keymap.set('n', '<leader>rs', '<cmd>RosTune resync<CR>', { desc = '[T]uner [R]esync' })
+vim.keymap.set('n', '<leader>rp', '<cmd>RosTune resync --pull<CR>', { desc = '[T]uner [P]ull Missing Params' })
 
 -- 5. Git Integration (Neogit & Diffview)
 -- Téléchargement des plugins (Telescope et Plenary sont déjà présents)
-vim.pack.add { 
+vim.pack.add {
   'https://github.com/sindrets/diffview.nvim',
-  'https://github.com/NeogitOrg/neogit' 
+  'https://github.com/NeogitOrg/neogit',
 }
 
 -- Initialisation de Neogit
-require("neogit").setup({
+require('neogit').setup {
   -- options spécifiques ici
-})
+}
 
 -- Raccourcis clavier (conversion du "remap" en "vim.keymap.set" natif)
-vim.keymap.set("n", "<leader>ng", "<CMD>Neogit<CR>", { desc = "Open [N]eo[g]it" })
-vim.keymap.set("n", "<leader>dv", "<CMD>DiffviewOpen<CR>", { desc = "Open [D]iff[v]iew" })
-vim.keymap.set("n", "<leader>dfh", "<CMD>DiffviewFileHistory %<CR>", { desc = "[D]iffview [F]ile [H]istory" })
+vim.keymap.set('n', '<leader>ng', '<CMD>Neogit<CR>', { desc = 'Open [N]eo[g]it' })
+vim.keymap.set('n', '<leader>dv', '<CMD>DiffviewOpen<CR>', { desc = 'Open [D]iff[v]iew' })
+vim.keymap.set('n', '<leader>dfh', '<CMD>DiffviewFileHistory %<CR>', { desc = '[D]iffview [F]ile [H]istory' })
 
 -- ==========================================
 -- Navigation rapide entre les buffers (fichiers)
 -- Maj+l (L) pour aller au buffer suivant
-vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Buffer Suivant" })
+vim.keymap.set('n', '<S-l>', '<cmd>bnext<CR>', { desc = 'Buffer Suivant' })
 -- Maj+h (H) pour aller au buffer précédent
-vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Buffer Précédent" })
-vim.keymap.set("n", "<leader>c", "<cmd>bdelete<CR>", { desc = "[C]lose Buffer" })
+vim.keymap.set('n', '<S-h>', '<cmd>bprevious<CR>', { desc = 'Buffer Précédent' })
+vim.keymap.set('n', '<leader>c', '<cmd>bdelete<CR>', { desc = '[C]lose Buffer' })
 
 -- tmux navigator
 vim.pack.add { 'https://github.com/christoomey/vim-tmux-navigator' }
@@ -154,3 +154,24 @@ vim.keymap.set('n', '<C-h>', ':TmuxNavigateLeft<CR>')
 vim.keymap.set('n', '<C-j>', ':TmuxNavigateDown<CR>')
 vim.keymap.set('n', '<C-k>', ':TmuxNavigateUp<CR>')
 vim.keymap.set('n', '<C-l>', ':TmuxNavigateRight<CR>')
+
+-- ==========================================================
+-- TRANSPARENCE NEOVIM
+-- ==========================================================
+vim.pack.add { 'https://github.com/xiyaowong/transparent.nvim' }
+
+pcall(function()
+  require('transparent').setup {
+    -- On demande au plugin de rendre aussi transparents les menus spécifiques
+    extra_groups = {
+      'NormalFloat', -- Menus flottants
+      'NeoTreeNormal', -- Fond de l'explorateur Neo-tree
+      'NeoTreeNormalNC', -- Fond de l'explorateur (inactif)
+      'TelescopeNormal', -- Fond de la recherche Telescope
+      'TelescopeBorder', -- Bordures de Telescope
+    },
+  }
+
+  -- Raccourci magique : Espace + Maj + T pour Activer/Désactiver la transparence !
+  vim.keymap.set('n', '<leader>T', '<Cmd>TransparentToggle<CR>', { desc = 'Toggle [T]ransparency' })
+end)
