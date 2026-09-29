@@ -11,12 +11,16 @@
     custom_command = tmux new-session -A -s main
     use_system_font = False
     copy_on_selection = True
+    background_type = transparent
+    background_darkness = 0.7
   [[classic]]
     cursor_color = "#aaaaaa"
     font = JetBrainsMono Nerd Font 11
     scrollback_infinite = True
     use_system_font = False
     copy_on_selection = True
+    background_type = transparent
+    background_darkness = 0.7
 [layouts]
   [[default]]
     [[[child1]]]
