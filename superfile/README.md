@@ -1,32 +1,57 @@
-### 🚀 Guide de Survie : Les commandes Superfile (`spf`)
+# 🚀 Superfile (spf) - Quick Cheatsheet
 
-Pour lancer le gestionnaire de fichiers, tape simplement **`spf`** dans ton terminal. 
-Voici les commandes indispensables pour naviguer comme un pro de Vim !
+Superfile is a modern, terminal-based file manager built for keyboard-centric workflows. It uses Vim-like keybindings for navigation, and `Ctrl` modifiers for dangerous actions.
 
-#### 🧭 1. Naviguer et Sélectionner
-*   **`h`, `j`, `k`, `l`** : Naviguer dans les dossiers (H pour reculer/dossier parent, L pour entrer dans un dossier).
-*   **`Entrée`** : Entrer dans un dossier (ou ouvrir un fichier).
-*   **`Espace`** : Sélectionner un ou plusieurs fichiers (ils changent de couleur).
-*   **`Tab`** : Changer de panneau (si tu as divisé ton écran).
+## 🧭 Navigation
+| Key | Action |
+| :--- | :--- |
+| `j` / `k` | Move cursor Down / Up |
+| `h` / `l` | Go to parent directory (`h`) / Enter directory (`l`) |
+| `Enter` | Open file (in Neovim) or enter directory |
+| `Backspace` | Go back to the previous directory |
+| `Tab` | Switch focus between active file panels |
+| `Space` | Select / Unselect a single item |
+| `v` | **Visual Mode**: Toggle multi-selection mode (use `j`/`k` to select blocks) |
+| `Esc` | Clear all selections or cancel current action |
 
-#### 🛠️ 2. Manipuler les Fichiers (Les Bases)
-*   **`e`** : Éditer le fichier sélectionné. *Puisqu'on a configuré Neovim, ça ouvrira directement Neovim !*
-*   **`Ctrl + n`** : Créer un nouveau fichier. *(💡 Astuce : Si tu ajoutes un `/` à la fin du nom, ça crée un dossier au lieu d'un fichier !)*
-*   **`Ctrl + r`** : Renommer le fichier sélectionné.
-*   **`Ctrl + d`** : Supprimer le fichier. *(Appuie 2 fois pour confirmer).*
+## 🛠️ File & Directory Operations (Requires Ctrl)
+*Note: Operations apply to the currently highlighted item OR all selected items.*
 
-#### 📋 3. Copier, Couper, Coller
-*   **`Ctrl + c`** : Copier le(s) fichier(s) sélectionné(s) (avec la touche Espace).
-*   **`Ctrl + x`** : Couper le(s) fichier(s).
-*   **`Ctrl + v`** : Coller dans le dossier actuel. Tu verras une barre de progression en direct en bas à gauche (très pratique pour les gros transferts de bags ROS !).
+| Key | Action | Details |
+| :--- | :--- | :--- |
+| `Ctrl + n` | **N**ew | Create a new file. **Pro-tip:** Add a `/` at the end of the name to create a **directory** (e.g., `my_folder/`). |
+| `Ctrl + r` | **R**ename | Rename the highlighted file or directory (or just `r`). |
+| `Ctrl + d` | **D**elete | Move the file/directory to the Trash. |
+| `Shift + d` | Destroy | **Permanently** delete the file/directory. |
+| `e` | **E**dit | Open the selected file in your default editor (`nvim`). |
 
-#### 📦 4. Les Superpouvoirs (Archives & Recherche)
-*   **`/` (Slash)** : Mode Recherche. Tape un mot et il filtre instantanément le dossier actuel.
-*   **`Ctrl + a`** : Archiver (Compresser) les fichiers sélectionnés.
-*   **`Ctrl + e`** : Extraire (Décompresser) une archive.
+## 📋 Clipboard (Copy/Cut/Paste)
+| Key | Action |
+| :--- | :--- |
+| `Ctrl + c` | **C**opy | Copies the selected items to the internal clipboard panel. |
+| `Ctrl + x` | Cut | Cuts the selected items. |
+| `Ctrl + v` | Paste | Pastes the copied/cut items into the current directory. |
 
-#### 🎛️ 5. Le Panneau de Commande
-Exactement comme dans Vim, tu peux appuyer sur **`:`** pour ouvrir la barre de commande de Superfile.
-*   Tape `:split` ➡️ Coupe l'écran en deux panneaux.
-*   Tape `:close` ➡️ Ferme le panneau actuel.
-*   Tape n'importe quelle commande shell (ex: `:echo hello` ou `:ros2 topic list`) et elle s'exécutera dans le dossier en cours.
+## 🪟 UI & Panels (Toggles)
+*Press the key once to jump into the panel. Press the **same key again** (or `Esc`) to jump back to the main file list.*
+
+| Key | Action |
+| :--- | :--- |
+| `s` | Toggle **S**idebar (Disks, bookmarks, pinned folders). |
+| `m` | Toggle **M**etadata panel (File permissions, size, dates). |
+| `p` | Toggle **P**rocess panel (Shows active copy/paste/extract progress). |
+| `f` | Toggle **F**ile preview panel (Shows file contents on the right). |
+
+## 🔍 Search & Commands
+| Key | Action |
+| :--- | :--- |
+| `/` | **Search/Filter:** Instantly filter the current directory by typing a name. |
+| `:` | **Command Palette:** Open the command line (like in Vim). |
+
+### Useful `:` Commands
+Type `:` followed by:
+* `split` : Split the current view into two parallel file panels.
+* `close` : Close the current split panel.
+* `cd <path>` : Jump directly to a specific path.
+* `archive` : Compress selected files into a `.zip` or `.tar.gz`.
+* `extract` : Unzip/extract the highlighted archive.
