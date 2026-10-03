@@ -1,0 +1,60 @@
+% ros2, pkg, python, cpp
+
+# Create a ROS 2 Python package
+ros2 pkg create --build-type ament_python <nom_du_package> --dependencies rclpy
+
+# Create a ROS 2 C++ package
+ros2 pkg create --build-type ament_cmake <nom_du_package> --dependencies rclcpp
+
+% ros2, debug, tf
+# Display a tf
+ros2 run tf2_ros tf2_echo <source_frame> <target_frame>
+
+
+% ros2, nav2, param, debug
+
+# Start rqt_reconfigure, ideal for Nav2
+ros2 run rqt_reconfigure rqt_reconfigure
+
+# Save node params to YAML
+ros2 param dump <node_name> > <node_name>.yaml
+
+
+% ros2, lifecycle
+
+# Get lifecycle state
+ros2 lifecycle get <lifecycle_node>
+
+# Change lifecycle state
+ros2 lifecycle set <lifecycle_node> <transition>
+
+# List lifecycle nodes
+$ lifecycle_node: ros2 lifecycle nodes
+# List all lifecycle transitions
+$ transition: echo -e "configure\nactivate\ndeactivate\ncleanup\nshutdown\nunconfigured"
+
+
+% ros2, colcon, build
+
+# Compile one pkg only
+colcon build --packages-select <workspace_package> --symlink-install
+
+# Compile one pkg and its dependancies
+colcon build --packages-up-to <workspace_package> --symlink-install
+
+# Clean Workspace
+rm -rf build/ install/ log/
+
+# List available pkgs
+$ workspace_package: colcon list -n
+
+% ros2, topic, interface
+
+# Show ros2 interface
+ros2 interface show <interface_type>
+
+# Show ros2 topic and filter
+ros2 topic echo <topic_name> | grep -i <search_term>
+
+$ topic_name: ros2 topic list
+$ interface_type: ros2 interface list | grep -v "Messages:" | grep -v "Services:" | grep -v "Actions:" | tr -d ' '

@@ -149,3 +149,10 @@ eval "$(fzf --bash)"
 eval "$(zoxide init --cmd cd bash)"
 # Just autocomplete
 eval "$(just --completions bash)"
+
+  export PATH="${PATH}:/home/hautervo/.cargo/bin"
+
+# NAVI - Interactive cheatsheet (Ctrl+G)
+if command -v navi &> /dev/null; then
+    eval "$(navi widget bash)"
+fi
