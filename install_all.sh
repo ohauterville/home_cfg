@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting global installation process..."
 
+# useful pkgs
+sudo apt install -y net-tools can-utils
+
 # to allow copy paste between apps
 sudo apt install -y xclip xsel wl-clipboard
 # btop is better htop
