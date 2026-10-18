@@ -10,6 +10,23 @@ sudo apt install -y net-tools can-utils
 
 # to allow copy paste between apps
 sudo apt install -y xclip xsel wl-clipboard
+
+# === croc for file sharing === 
+sudo curl -fsSL -o /usr/share/keyrings/pkghaus-archive-keyring.gpg \
+    https://apt.pkg.haus/pkghaus-archive-keyring.gpg
+
+sudo tee /etc/apt/sources.list.d/pkghaus.sources > /dev/null <<EOF
+Types: deb
+URIs: https://apt.pkg.haus
+Suites: trixie
+Components: main
+Signed-By: /usr/share/keyrings/pkghaus-archive-keyring.gpg
+EOF
+
+sudo apt update
+sudo apt install pkghaus-archive-keyring croc
+#
+
 # btop is better htop
 sudo apt install btop
 # lnav is a log navigator
