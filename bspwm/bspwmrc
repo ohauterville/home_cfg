@@ -6,6 +6,7 @@
 
 # 1. Start the hotkey daemon (sxhkd)
 setxkbmap fr 
+xsetroot -cursor_name left_ptr
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 # 2. Launch Status Bar (Polybar)

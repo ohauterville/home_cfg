@@ -22,3 +22,5 @@ if command -v eza &> /dev/null; then
 fi
 # lnav for ros
 alias rlog="lnav ~/.ros/log/latest/"
+# nvim
+alias nv="nvim"

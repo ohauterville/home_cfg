@@ -11,22 +11,21 @@ fi
 
 # Detect the desktop environment (lowercase for easier matching)
 detect_desktop() {
-    local de="${XDG_CURRENT_DESKTOP:-$DESKTOP_SESSION}"
-    de="${de,,}"
-    case "$de" in
-        *gnome*|*unity*|*ubuntu*) echo "gnome" ;;
-        *bspwm*)                  echo "bspwm" ;;
-        *)
-            # Fallback: check running processes
-            if pgrep -x bspwm >/dev/null; then
-                echo "bspwm"
-            elif pgrep -x gnome-shell >/dev/null; then
-                echo "gnome"
-            else
-                echo "unknown"
-            fi
-            ;;
-    esac
+    # Running processes are more reliable than inherited env variables
+    if pgrep -x bspwm >/dev/null; then
+        echo "bspwm"
+    elif pgrep -x gnome-shell >/dev/null; then
+        echo "gnome"
+    else
+        # Fallback on environment variables
+        local de="${XDG_CURRENT_DESKTOP:-$DESKTOP_SESSION}"
+        de="${de,,}"
+        case "$de" in
+            *bspwm*)                  echo "bspwm" ;;
+            *gnome*|*unity*|*ubuntu*) echo "gnome" ;;
+            *)                        echo "unknown" ;;
+        esac
+    fi
 }
 
 DESKTOP=$(detect_desktop)
