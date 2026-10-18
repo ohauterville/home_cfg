@@ -78,9 +78,9 @@ super + shift + {h,j,k,l}
 
 # Focus a specific workspace (1 = ros, 2 = internet, 3 = llm)
 # Uses the unshifted characters: & (1), é (2), " (3)
-super + {ampersand,eacute,quotedbl}
-    bspc desktop -f '^{1-3}'
+super + {ampersand,eacute,quotedbl,apostrophe}
+    bspc desktop -f '^{1-4}'
 
 # Move the focused window to a specific workspace
-super + shift + {ampersand,eacute,quotedbl}
-    bspc node -d '^{1-3}'
+super + shift + {ampersand,eacute,quotedbl,apostrophe}
+    bspc node -d '^{1-4}'
