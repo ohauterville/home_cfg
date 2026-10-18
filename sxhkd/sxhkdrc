@@ -1,0 +1,86 @@
+# -----------------------------------------------------------------------------
+# sxhkd Configuration (Keybindings for bspwm)
+# -----------------------------------------------------------------------------
+
+# --- System & Session ---
+
+# Restart bspwm and sxhkd (useful when modifying this config file)
+super + Escape
+    pkill -USR1 -x sxhkd; bspc wm -r
+
+# Quit bspwm gracefully
+super + shift + q
+    bspc quit
+
+# --- Applications ---
+
+# Open terminal emulator (Terminator) - Default profile
+super + Return
+    terminator
+
+# Open terminal emulator (Terminator) - Classic profile
+super + shift + Return
+    terminator -p classic
+
+# Open application launcher (Rofi)
+super + d
+    rofi -show drun
+
+# Open Firefox Browser
+super + b
+    firefox
+
+# Open Claude
+super + c
+    claude-desktop
+
+# Open File Manager (Superfile / spf) inside a new terminal
+super + e
+    terminator -e "spf"
+
+# --- Window Management ---
+
+# Close the focused window
+super + w
+    bspc node -c
+
+# Kill the focused window (forced)
+super + shift + w
+    bspc node -k
+
+# List and search all open windows across all workspaces (Tmux style)
+super + Tab
+    rofi -show window
+
+# Zoom / Unzoom the focused tile (Toggle fullscreen)
+super + f
+    bspc node -t \~fullscreen
+
+# Toggle between tiling and monocle layout (all windows maximized)
+super + m
+    bspc desktop -l next
+
+# Toggle window state (floating / tiled)
+super + t
+    bspc node -t \~floating
+
+# --- Focus & Navigation (Vim keys) ---
+
+# Focus the node in the given direction
+super + {h,j,k,l}
+    bspc node -f {west,south,north,east}
+
+# Move the focused window in the given direction
+super + shift + {h,j,k,l}
+    bspc node -m {west,south,north,east}
+
+# --- Workspaces (AZERTY Layout) ---
+
+# Focus a specific workspace (1 = ros, 2 = internet, 3 = llm)
+# Uses the unshifted characters: & (1), é (2), " (3)
+super + {ampersand,eacute,quotedbl}
+    bspc desktop -f '^{1-3}'
+
+# Move the focused window to a specific workspace
+super + shift + {ampersand,eacute,quotedbl}
+    bspc node -d '^{1-3}'

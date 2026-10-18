@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# -----------------------------------------------------------------------------
+# Bspwm Configuration
+# -----------------------------------------------------------------------------
+
+# 1. Start the hotkey daemon (sxhkd)
+setxkbmap fr 
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+# 2. Launch Status Bar (Polybar)
+~/.config/polybar/launch.sh &
+
+# Apply touchpad settings at startup (works with any touchpad name)
+for id in $(xinput list --id-only); do
+    if xinput list-props "$id" 2>/dev/null | grep -q "libinput Tapping Enabled"; then
+        xinput set-prop "$id" "libinput Tapping Enabled" 1
+        xinput set-prop "$id" "libinput Natural Scrolling Enabled" 1
+    fi
+done
+
+# 3. Setup Wallpaper
+# Replace this path with the exact location of your wallpaper inside your home_cfg
+#feh --bg-fill ~/Pictures/Wallpapers/perseverance.jpg &
+
+# 4. Workspaces definition
+bspc monitor -d Main Web Claude Dump
+
+# 5. Visual configuration
+bspc config border_width         2
+bspc config window_gap          10
+bspc config split_ratio          0.5
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc config focused_border_color   "#81a1c1"
+bspc config normal_border_color    "#4c566a"
+
+# 6. Window Rules
+# Force applications to open in specific workspaces
+# The desktop numbering is 1-indexed (1 = ros, 2 = internet, 3 = llm)
+
+# Terminal goes to Workspace 1 (Main)
+bspc rule -a Terminator desktop='^1'
+
+# Browsers go to Workspace 2 (Web)
+bspc rule -a firefox_firefox desktop='^2'
+bspc rule -a Google-chrome desktop='^2'
+
+# Claude desktop (Claude)
+bspc rule -a com.anthropic.Claude desktop='^3'
