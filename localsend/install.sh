@@ -31,4 +31,8 @@ sudo apt-get install -f -y
 # Clean up the temporary file
 rm -f "${TMP_DEB}"
 
+echo "Creating symlink with name localsend instead of localsend_app"
+# Create a symlink from the actual binary to the desired command name
+sudo ln -s /usr/bin/localsend_app /usr/local/bin/localsend
+
 echo "LocalSend installation completed successfully."
