@@ -6,7 +6,7 @@ alias wspro="cd ~/ws/gitlab_xlim"
 alias wsper="cd ~/ws/github_perso"
 alias lgit="lazygit"
 #Apptainer
-alias appr="apptainer run --nv --bind ./home:/home/apptainer"
+alias appr="apptainer run --nv --bind ./home:/home/apptainer -B ~/ws/rosbags:/rosbags"
 alias appstart="apptainer instance start --bind ./home:/home/apptainer"
 alias appstop="apptainer instance stop"
 #terminator tmux
